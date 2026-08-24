@@ -1,5 +1,5 @@
 # DispositivosMoviles-2026-II
-# Profesor: Matias
+# Profesor: Matias Duro
 
 # Clase 1
 
