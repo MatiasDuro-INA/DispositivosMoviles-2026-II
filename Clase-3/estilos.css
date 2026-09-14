@@ -1,0 +1,309 @@
+/* ============================================================================
+   Apunte de Interaccion en Dispositivos Moviles — hoja de estilos
+   ----------------------------------------------------------------------------
+   Esta hoja es, ella misma, un ejemplo de la materia:
+
+     · No tiene NI UNA media query. Ninguna. Y se lee bien en un telefono de
+       320px y en un monitor de 27 pulgadas.
+     · No tiene ningun ancho fijo en pixeles.
+     · El estilo base es el del telefono. Lo unico que hace para pantallas
+       grandes es poner un tope de ancho al texto, con max-width — que es una
+       PROPIEDAD, no una media query.
+
+   Si estas en la clase 1 no hace falta que entiendas nada de aca. Volve en la
+   clase 4 y vas a entenderla entera.
+   ========================================================================== */
+
+:root {
+    --tinta: #1e293b;
+    --tinta-suave: #64748b;
+    --papel: #f8fafc;
+    --caja: #ffffff;
+    --borde: #e2e8f0;
+    --acento: #4338ca;
+    --acento-suave: #eef2ff;
+    --ok: #15803d;
+    --ok-suave: #f0fdf4;
+    --alerta: #b45309;
+    --alerta-suave: #fffbeb;
+    --error: #b91c1c;
+    --error-suave: #fef2f2;
+    --codigo: #0f172a;
+
+    /* La escala de espaciado de la clase 2. Seis escalones, en rem.
+       Todo el padding, margin y gap de esta hoja sale de aca. */
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 1rem;
+    --s-4: 1.5rem;
+    --s-5: 2rem;
+    --s-6: 3rem;
+
+    --radio: 10px;
+    --ancho-texto: 46rem;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background-color: var(--papel);
+    color: var(--tinta);
+    line-height: 1.65;
+    /* padding en rem, no en px: si el usuario agranda la letra del sistema,
+       el margen crece con ella. */
+    padding: 0 var(--s-3) var(--s-6);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* El tope de ancho: una sola declaracion, sin media query. En el telefono no
+   hace nada (100% ya es menos que 46rem); en el monitor evita el renglon de
+   200 caracteres. */
+.tapa,
+.indice,
+main,
+.pie {
+    /* min(a, b) devuelve el mas chico: en el telefono gana 100%, en el monitor
+       gana 46rem. Una declaracion en vez de width + max-width. Clase 3. */
+    width: min(100%, var(--ancho-texto));
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Tapa --- */
+.tapa {
+    padding: var(--s-5) 0 var(--s-4);
+    border-bottom: 3px solid var(--acento);
+}
+
+.materia {
+    margin: 0 0 var(--s-2);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--acento);
+}
+
+.tapa h1 {
+    margin: 0 0 var(--s-2);
+    /* clamp: el titulo crece con la pantalla, entre 1.6rem y 2.4rem.
+       Esto es de la clase 3. */
+    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+    line-height: 1.2;
+}
+
+.bajada {
+    margin: 0;
+    color: var(--tinta-suave);
+}
+
+/* --- Indice --- */
+.indice {
+    margin: var(--s-4) auto;
+    padding: var(--s-3) var(--s-3);
+    background: var(--caja);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+}
+
+.indice h2 {
+    margin: 0 0 var(--s-2);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+}
+
+.indice ol {
+    margin: 0;
+    padding-left: var(--s-3);
+}
+
+.indice li {
+    margin: var(--s-1) 0;
+}
+
+.indice a {
+    color: var(--acento);
+}
+
+/* --- Secciones --- */
+main section {
+    padding: var(--s-5) 0 var(--s-2);
+    border-bottom: 1px solid var(--borde);
+}
+
+main section:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    font-size: clamp(1.3rem, 1.1rem + 1vw, 1.7rem);
+    line-height: 1.25;
+    margin: 0 0 var(--s-3);
+}
+
+h3 {
+    font-size: 1.05rem;
+    margin: var(--s-4) 0 var(--s-2);
+}
+
+.numero {
+    color: var(--acento);
+}
+
+p {
+    margin: 0 0 var(--s-3);
+}
+
+ul,
+ol {
+    margin: 0 0 var(--s-3);
+    padding-left: var(--s-4);
+}
+
+li {
+    margin: var(--s-1) 0;
+}
+
+a {
+    color: var(--acento);
+}
+
+/* --- Codigo --- */
+code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 0.9em;
+    background: var(--acento-suave);
+    color: var(--codigo);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    /* En un telefono, un nombre de propiedad largo tiene que poder cortarse
+       o rompe el ancho de la pagina. */
+    overflow-wrap: anywhere;
+}
+
+pre {
+    background: var(--codigo);
+    color: #e2e8f0;
+    padding: var(--s-3);
+    border-radius: var(--radio);
+    /* El bloque de codigo scrollea SOLO. Sin esto, una linea larga hace
+       scrollear la pagina entera para el costado. */
+    overflow-x: auto;
+    margin: 0 0 var(--s-3);
+    font-size: 0.85rem;
+    line-height: 1.55;
+}
+
+pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    overflow-wrap: normal;
+}
+
+/* --- Tablas: en el telefono scrollean solas, no rompen el ancho --- */
+.tabla {
+    overflow-x: auto;
+    margin: 0 0 var(--s-3);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    background: var(--caja);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+}
+
+th,
+td {
+    text-align: left;
+    padding: var(--s-2) var(--s-2);
+    border-bottom: 1px solid var(--borde);
+    vertical-align: top;
+}
+
+th {
+    background: var(--acento-suave);
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--acento);
+    white-space: nowrap;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- Cajitas --- */
+.nota,
+.ojo,
+.mal,
+.bien {
+    padding: var(--s-3) var(--s-3);
+    border-radius: var(--radio);
+    border-left: 4px solid;
+    margin: 0 0 var(--s-3);
+}
+
+.nota > :last-child,
+.ojo > :last-child,
+.mal > :last-child,
+.bien > :last-child {
+    margin-bottom: 0;
+}
+
+.nota {
+    background: var(--acento-suave);
+    border-color: var(--acento);
+}
+
+.ojo {
+    background: var(--alerta-suave);
+    border-color: var(--alerta);
+}
+
+.mal {
+    background: var(--error-suave);
+    border-color: var(--error);
+}
+
+.bien {
+    background: var(--ok-suave);
+    border-color: var(--ok);
+}
+
+.etiqueta {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--s-1);
+}
+
+.mal .etiqueta { color: var(--error); }
+.bien .etiqueta { color: var(--ok); }
+.ojo .etiqueta { color: var(--alerta); }
+.nota .etiqueta { color: var(--acento); }
+
+/* --- Pie --- */
+.pie {
+    padding: var(--s-5) 0 0;
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+}

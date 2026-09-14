@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 3 — Unidades fluidas | Interacción en Dispositivos Móviles</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+
+    <header class="tapa">
+        <p class="materia">Interacción en Dispositivos Móviles · Clase 3</p>
+        <h1>Unidades fluidas: qué se estira y qué no</h1>
+        <p class="bajada">
+            <strong>Probá esto mientras leés:</strong> agrandá el tamaño de letra en la configuración
+            de tu teléfono (o de Chrome — Configuración → Apariencia → Tamaño de fuente, que
+            <em>no</em> es el zoom) y recargá. Esta página entera crece con vos, incluidos los
+            márgenes. El título además usa <code>clamp()</code>: arrastrá el ancho de la ventana y
+            mirá cómo se mueve y se frena.
+        </p>
+    </header>
+
+    <nav class="indice">
+        <h2>En esta clase</h2>
+        <ol>
+            <li><a href="#unidades">Qué unidad usar</a></li>
+            <li><a href="#rem">Por qué <code>rem</code> y no <code>px</code></a></li>
+            <li><a href="#alto">El alto miente en el teléfono</a></li>
+            <li><a href="#clamp"><code>clamp()</code></a></li>
+            <li><a href="#minmax"><code>min()</code> y <code>max()</code></a></li>
+            <li><a href="#escala">La escala tipográfica</a></li>
+            <li><a href="#chuleta">Chuleta</a></li>
+        </ol>
+    </nav>
+
+    <main>
+
+        <!-- ================================================================ -->
+        <section id="unidades">
+            <h2><span class="numero">1.</span> Qué unidad usar</h2>
+
+            <div class="tabla">
+                <table>
+                    <tr><th>Unidad</th><th>Relativa a</th><th>Para qué</th></tr>
+                    <tr>
+                        <td><code>px</code></td>
+                        <td>Nada. Es absoluta</td>
+                        <td>Detalles de dibujo: bordes, sombras, <code>border-radius</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>rem</code></td>
+                        <td>El tamaño de letra de la <strong>raíz</strong></td>
+                        <td>Texto y espacio alrededor de texto. <strong>La que va casi siempre</strong></td>
+                    </tr>
+                    <tr>
+                        <td><code>em</code></td>
+                        <td>El tamaño de letra de <strong>su padre</strong></td>
+                        <td>Cuando querés que algo escale con el texto <em>de ese elemento</em></td>
+                    </tr>
+                    <tr>
+                        <td><code>%</code></td>
+                        <td>Su padre</td>
+                        <td>Anchos dentro de un contenedor</td>
+                    </tr>
+                    <tr>
+                        <td><code>vw</code></td>
+                        <td>El <strong>ancho</strong> del viewport</td>
+                        <td>Parte del preferido de un <code>clamp()</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ch</code></td>
+                        <td>El ancho del carácter "0"</td>
+                        <td>Topes de renglón: <code>max-width: 60ch</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>svh</code> / <code>dvh</code></td>
+                        <td>El <strong>alto</strong> visible</td>
+                        <td>Heros. <strong>Nunca <code>vh</code></strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="bien">
+                <span class="etiqueta">La regla</span>
+                <p>¿Es texto, o espacio alrededor de texto? → <code>rem</code></p>
+                <p>¿Es un detalle de dibujo? → <code>px</code> está bien</p>
+            </div>
+
+            <h3><code>em</code> se acumula, <code>rem</code> no</h3>
+
+            <p>
+                <code>em</code> es relativo a <em>su padre</em>: se multiplica en cada nivel de
+                anidación. A la tercera caja anidada, el texto es el doble o la mitad de lo que
+                esperabas. <code>rem</code> siempre es contra la raíz, en cualquier nivel.
+            </p>
+
+            <p>
+                Usá <code>rem</code>. <code>em</code> sirve para una cosa puntual que vemos en la
+                clase 5: cuando querés que el <code>padding</code> de un botón escale con el texto
+                <em>de ese botón</em>.
+            </p>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="rem">
+            <h2><span class="numero">2.</span> Por qué <code>rem</code> y no <code>px</code></h2>
+
+            <p>
+                Mucha gente agranda la letra en la configuración del teléfono: gente que no ve bien,
+                gente con el teléfono lejos en el colectivo, gente con el brillo bajo, gente cansada
+                a las once de la noche. <strong>Es muchísima más de la que creés.</strong>
+            </p>
+
+            <p>
+                Si tu texto está en <code>px</code>, tu página <strong>ignora</strong> ese pedido.
+                Para esa persona, tu app está rota.
+            </p>
+
+            <div class="nota">
+                <span class="etiqueta">No lo confundas con el zoom</span>
+                <p>
+                    El zoom agranda todo por igual, incluidos los <code>px</code>. Lo que tu página
+                    ignora es el cambio de <strong>tamaño de letra</strong>, que es otra cosa.
+                </p>
+            </div>
+
+            <h3>Lo peor es mezclar</h3>
+
+            <div class="tabla">
+                <table>
+                    <tr><th>Caja</th><th>Qué pasa cuando el usuario agranda la letra</th></tr>
+                    <tr><td>Todo en <code>px</code></td><td>No cambia nada. Ignora al usuario</td></tr>
+                    <tr><td>Todo en <code>rem</code></td><td>Crece. Bien</td></tr>
+                    <tr>
+                        <td>Texto <code>px</code>, espacio <code>rem</code></td>
+                        <td><strong>Un globo con una letra adentro</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Texto <code>rem</code>, espacio <code>px</code></td>
+                        <td>La letra crece y no entra en la caja</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p>
+                Mezclar es <strong>peor</strong> que elegir mal. La unidad se elige una vez, para toda
+                la hoja.
+            </p>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="alto">
+            <h2><span class="numero">3.</span> El alto miente en el teléfono</h2>
+
+            <p>
+                En el teléfono, la barra del navegador <strong>aparece y desaparece</strong> al
+                scrollear. Entonces, ¿cuánto vale <code>100vh</code>?
+            </p>
+
+            <p>
+                Vale el alto <strong>sin</strong> la barra. Pero cuando la página recién carga, la
+                barra <strong>está</strong>. Resultado: el botón del hero queda cortado, y sólo
+                aparece si bajás un poco.
+            </p>
+
+            <div class="tabla">
+                <table>
+                    <tr><th>Unidad</th><th>Cuánto vale</th></tr>
+                    <tr>
+                        <td><code>100lvh</code></td>
+                        <td>El alto sin barra. El más grande. <strong><code>100vh</code> se porta así</strong></td>
+                    </tr>
+                    <tr>
+                        <td><code>100dvh</code></td>
+                        <td>El alto visible <strong>ahora</strong>. Cambia mientras scrolleás</td>
+                    </tr>
+                    <tr>
+                        <td><code>100svh</code></td>
+                        <td>El alto con la barra puesta. El más chico. <strong>El más seguro</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mal">
+                <span class="etiqueta">Mal</span>
+                <pre><code>.hero { height: 100vh; }</code></pre>
+            </div>
+
+            <div class="bien">
+                <span class="etiqueta">Bien</span>
+                <pre><code>.hero { min-height: 100svh; }</code></pre>
+            </div>
+
+            <p>Hay <strong>dos</strong> arreglos ahí, y los dos importan:</p>
+
+            <ul>
+                <li><code>svh</code> en vez de <code>vh</code>, por la barra.</li>
+                <li>
+                    <code>min-height</code> en vez de <code>height</code>: con <code>height</code>
+                    fijo, si el contenido no entra, se desborda. <code>min-height</code> dice "al
+                    menos esto, y si hace falta más, crecé".
+                </li>
+            </ul>
+
+            <div class="nota">
+                <span class="etiqueta">Y casi nunca hace falta pantalla completa</span>
+                <p>
+                    Probá <code>min-height: 60svh</code>. Pensá en el teléfono <strong>apaisado</strong>:
+                    ahí <code>100svh</code> no deja ver absolutamente nada más que el hero.
+                </p>
+            </div>
+
+            <h3><code>100vw</code> produce scroll horizontal</h3>
+
+            <p>
+                <code>100vw</code> incluye el ancho de la barra de scroll. En una página que
+                scrollea, <code>width: 100vw</code> es más ancho que el área visible: aparece el
+                scroll horizontal de la clase 1, y cuesta encontrarlo porque el número
+                <em>parece</em> correcto.
+            </p>
+
+            <p><strong>Para "todo el ancho" va <code>width: 100%</code>.</strong></p>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="clamp">
+            <h2><span class="numero">4.</span> <code>clamp()</code></h2>
+
+            <p>El problema, primero:</p>
+
+            <div class="tabla">
+                <table>
+                    <tr>
+                        <td><code>font-size: 2.5rem</code></td>
+                        <td>Cuatro renglones en el teléfono. Perdido en el monitor</td>
+                    </tr>
+                    <tr>
+                        <td><code>font-size: 5vw</code></td>
+                        <td>A 320px es ilegible. A 2000px es un cartel</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p>Ninguna de las dos sirve sola. Una no escucha a la pantalla; la otra la escucha demasiado.</p>
+
+            <pre><code>font-size: clamp( 1.5rem , 1.2rem + 2vw , 2.5rem );
+                 \______/  \___________/  \______/
+                  MÍNIMO     PREFERIDO     MÁXIMO</code></pre>
+
+            <div class="nota">
+                <span class="etiqueta">Leelo en voz alta</span>
+                <p>
+                    "Usá el del medio. Pero <strong>nunca menos</strong> que el primero, ni
+                    <strong>nunca más</strong> que el tercero."
+                </p>
+                <p>Si lo podés decir así, lo podés escribir.</p>
+            </div>
+
+            <h3>Por qué el preferido lleva <code>rem + vw</code></h3>
+
+            <p>
+                <code>clamp(1.5rem, 4vw, 2.5rem)</code> anda. Pero si el usuario agranda la letra del
+                sistema, <strong>no pasa nada</strong>: <code>vw</code> no sabe nada del tamaño de
+                letra.
+            </p>
+
+            <pre><code>clamp(1.5rem, 1.2rem + 2vw, 2.5rem)</code></pre>
+
+            <ul>
+                <li>El <code>1.2rem</code> es la parte que escucha al <strong>usuario</strong>.</li>
+                <li>El <code>2vw</code> es la parte que escucha a la <strong>pantalla</strong>.</li>
+            </ul>
+
+            <p><strong>El preferido casi siempre es <code>Xrem + Yvw</code>.</strong></p>
+
+            <p>
+                Adentro de <code>clamp()</code>, <code>min()</code> y <code>max()</code> se puede
+                sumar <strong>sin <code>calc()</code></strong>: son funciones matemáticas.
+            </p>
+
+            <h3>Los dos errores que no avisan</h3>
+
+            <div class="mal">
+                <span class="etiqueta">1 · Falta <code>var()</code></span>
+                <pre><code>font-size: clamp(1.05rem, --texto-grande, 1.35rem);</code></pre>
+                <p>
+                    Sin <code>var()</code>, <code>--texto-grande</code> no es un valor: es basura, y
+                    <strong>la declaración entera se descarta</strong>. El texto queda en el tamaño
+                    heredado y nadie se entera de por qué. En DevTools se ve tachado.
+                </p>
+            </div>
+
+            <div class="mal">
+                <span class="etiqueta">2 · Mínimo mayor que máximo</span>
+                <pre><code>font-size: clamp(2.5rem, 2vw, 1.4rem);</code></pre>
+                <p>
+                    Gana el mínimo y queda fijo en <code>2.5rem</code>. Tampoco da error. Arrastrás
+                    el ancho y no se mueve.
+                </p>
+            </div>
+
+            <p>
+                Los dos son del material del cuatrimestre pasado. Y el segundo estaba en un token que
+                nunca se usaba (<code>--text-sm: 48px</code>, más del doble que el máximo de
+                <code>--text-md</code>), así que nadie se dio cuenta nunca.
+            </p>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="minmax">
+            <h2><span class="numero">5.</span> <code>min()</code> y <code>max()</code></h2>
+
+            <pre><code>min(a, b)   /* devuelve el MÁS CHICO */
+max(a, b)   /* devuelve el MÁS GRANDE */</code></pre>
+
+            <div class="ojo">
+                <span class="etiqueta">Suena al revés y no lo es</span>
+                <p><code>min()</code> sirve para poner un <strong>máximo</strong>.</p>
+            </div>
+
+            <pre><code>width: min(100%, 60rem);</code></pre>
+
+            <ul>
+                <li>En el teléfono, el más chico es <code>100%</code>.</li>
+                <li>En el monitor, el más chico es <code>60rem</code>.</li>
+            </ul>
+
+            <p>O sea que el ancho <strong>nunca pasa de 60rem</strong>. Es esto:</p>
+
+            <pre><code>/* dos declaraciones */        /* una */
+width: 100%;                   width: min(100%, 60rem);
+max-width: 60rem;</code></pre>
+
+            <p><code>max()</code> sirve para un piso: <code>padding: max(1rem, 3vw)</code> nunca baja de <code>1rem</code>.</p>
+
+            <h3>El patrón más usado de toda la web</h3>
+
+            <pre><code>.contenedor {
+  width: min(100%, 60rem);
+  margin-inline: auto;
+}</code></pre>
+
+            <p>
+                La sección va a ancho completo y pinta el fondo de borde a borde. El
+                <code>.contenedor</code> de adentro le pone tope al contenido y lo centra.
+            </p>
+
+            <div class="bien">
+                <span class="etiqueta">Llevátelo así</span>
+                <p><strong>El fondo llega al borde. El texto no.</strong></p>
+            </div>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="escala">
+            <h2><span class="numero">6.</span> La escala tipográfica</h2>
+
+            <pre><code>--texto-xs:   0.8rem;
+--texto-sm:   0.9rem;
+--texto-base: 1rem;
+--texto-lg:   clamp(1.05rem, 1rem   + 0.3vw, 1.25rem);
+--texto-xl:   clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
+--texto-2xl:  clamp(1.6rem,  1.3rem + 1.6vw, 2.75rem);</code></pre>
+
+            <div class="nota">
+                <span class="etiqueta">Los tres chicos van fijos</span>
+                <p>
+                    Un metadato de <code>0.8rem</code> no tiene por qué crecer porque la pantalla sea
+                    más ancha. Sólo escalan los grandes, que son los que se ven ridículos si no lo
+                    hacen.
+                </p>
+                <p><strong><code>clamp()</code> en todo es tan malo como <code>clamp()</code> en nada.</strong></p>
+            </div>
+
+            <h3>El renglón cómodo</h3>
+
+            <pre><code>--medida: 60ch;
+
+p { max-width: var(--medida); }</code></pre>
+
+            <p>
+                <code>ch</code> es el ancho del carácter "0" de la fuente actual. <code>60ch</code> es
+                más o menos 60 caracteres por renglón. Más largo que eso, y al volver de renglón se
+                pierde el ojo.
+            </p>
+
+            <p>En un título va más corto: <code>20ch</code> o <code>25ch</code>.</p>
+        </section>
+
+        <!-- ================================================================ -->
+        <section id="chuleta">
+            <h2><span class="numero">7.</span> Chuleta</h2>
+
+            <div class="tabla">
+                <table>
+                    <tr><th>Quiero…</th><th>Escribo</th></tr>
+                    <tr><td>Un título que crezca con la pantalla</td><td><code>clamp(1.6rem, 1.3rem + 1.6vw, 2.75rem)</code></td></tr>
+                    <tr><td>Un ancho con tope</td><td><code>width: min(100%, 60rem)</code></td></tr>
+                    <tr><td>Un piso</td><td><code>padding: max(1rem, 3vw)</code></td></tr>
+                    <tr><td>Un hero de pantalla</td><td><code>min-height: 100svh</code> (o mejor, <code>60svh</code>)</td></tr>
+                    <tr><td>Todo el ancho</td><td><code>width: 100%</code> — nunca <code>100vw</code></td></tr>
+                    <tr><td>Un renglón cómodo</td><td><code>max-width: 60ch</code></td></tr>
+                    <tr><td>Centrar un contenedor</td><td><code>margin-inline: auto</code></td></tr>
+                </table>
+            </div>
+
+            <div class="bien">
+                <span class="etiqueta">La regla del día</span>
+                <p>
+                    Ningún <code>font-size</code> en píxeles. Ningún <code>height: 100vh</code>.
+                    Ningún <code>width: 100vw</code>.
+                </p>
+            </div>
+
+            <h3>Para la clase que viene</h3>
+
+            <p>
+                Abrí tu app en un monitor ancho. Vas a ver <strong>tres tarjetas apiladas y media
+                pantalla vacía al costado</strong>.
+            </p>
+
+            <p>
+                En el teléfono está perfecto. En el monitor está mal. <strong>¿Qué habría que
+                hacer?</strong> Pensalo: la clase 4 es esa respuesta.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <p>
+            <strong>El título de esta página usa <code>clamp()</code> y su contenido usa
+            <code>min(100%, 46rem)</code>.</strong> Arrastrá el ancho de la ventana de 320 a 1600 y
+            mirá: el título se mueve y se frena, y el texto nunca pasa de un renglón cómodo. Todo eso,
+            sin una sola <code>@media</code>.
+        </p>
+        <p>Interacción en Dispositivos Móviles · Clase 3</p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+/* ============================================================================
+   Esta pagina tiene SIETE problemas de tamano. Arreglalos todos.
+   Cada uno esta marcado con un numero.
+   ============================================================================ */
+
+:root {
+  --papel:          #f8fafc;
+  --superficie:     #ffffff;
+  --tinta:          #1e293b;
+  --tinta-suave:    #475569;
+  --borde:          #e2e8f0;
+  --primario-fondo: #7c2d12;
+  --primario-texto: #ffffff;
+  --primario-suave: #ffedd5;
+
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 1rem;
+  --s-4: 1.5rem;
+  --s-5: 2rem;
+  --s-6: 3rem;
+
+  --radio: 10px;
+
+  /* PROBLEMA 4: este token existe y esta bien, pero abajo se usa MAL. */
+  --texto-grande: 1.2rem + 2.5vw;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  color: var(--tinta);
+  background: var(--papel);
+}
+
+/* PROBLEMA 1: width + max-width son dos declaraciones para una sola idea.
+   Se puede escribir en una, con min(). */
+.contenedor {
+  width: 100%;
+  max-width: 60rem;
+  margin-inline: auto;
+  padding-inline: var(--s-3);
+}
+
+/* PROBLEMA 2: en el telefono, 100vh vale el alto SIN la barra del navegador,
+   asi que el boton queda cortado al cargar. Y con height fijo, si el contenido
+   no entra, se desborda.
+   Hay que arreglar DOS cosas en esta linea. */
+.hero {
+  height: 100vh;
+  background: var(--primario-suave);
+  padding-block: var(--s-6);
+  display: grid;
+  align-content: center;
+}
+
+.fecha {
+  margin: 0 0 var(--s-2);
+  font-size: 14px;                  /* PROBLEMA 5: px en un texto */
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primario-fondo);
+}
+
+/* PROBLEMA 3: 42px es un numero elegido mirando un monitor. En 320px ocupa
+   cinco renglones. Tiene que ser fluido: entre 1.75rem y 3rem. */
+.titulo {
+  margin: 0 0 var(--s-3);
+  font-size: 42px;
+  line-height: 1.1;
+  max-width: 20ch;
+}
+
+/* PROBLEMA 4 (sigue): falta algo para que --texto-grande sea un valor de verdad.
+   Asi como esta, la declaracion ENTERA se descarta y el parrafo queda en 1rem. */
+.bajada {
+  margin: 0 0 var(--s-4);
+  font-size: clamp(1.05rem, --texto-grande, 1.35rem);
+  color: var(--tinta-suave);
+  max-width: 45ch;
+}
+
+.boton {
+  justify-self: start;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--radio);
+  background: var(--primario-fondo);
+  color: var(--primario-texto);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* PROBLEMA 6: el minimo es mas grande que el maximo. No da error: gana el
+   minimo y queda fijo. Arrastra el ancho y vas a ver que no se mueve. */
+.subtitulo {
+  margin: var(--s-6) 0 var(--s-4);
+  font-size: clamp(2.5rem, 2vw, 1.4rem);
+  line-height: 1.2;
+}
+
+/* PROBLEMA 7: 100vw incluye el ancho de la barra de scroll. En una pagina que
+   scrollea, esto produce scroll horizontal. */
+.datos {
+  list-style: none;
+  margin: 0 0 var(--s-4);
+  padding: 0;
+  width: 100vw;
+}
+
+.datos li {
+  padding: var(--s-3) 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+.dato__clave {
+  display: block;
+  font-size: 13px;                  /* PROBLEMA 5 (sigue) */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tinta-suave);
+}
+
+.dato__valor {
+  font-size: 1rem;
+}
+
+.texto {
+  margin: 0 0 var(--s-4);
+  max-width: 60ch;
+}
+
+.aviso {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--primario-fondo);
+  border-radius: var(--radio);
+  padding: var(--s-3);
+}
+
+.aviso p {
+  margin: 0 0 var(--s-1);
+}
+
+.aviso p:last-child {
+  margin-bottom: 0;
+}
+
+.aviso__titulo {
+  font-weight: 700;
+}
+
+.pie {
+  margin-top: var(--s-6);
+  padding: var(--s-4) var(--s-3);
+  border-top: 1px solid var(--borde);
+  color: var(--tinta-suave);
+  font-size: 14px;                  /* PROBLEMA 5 (sigue) */
+  text-align: center;
+}
+
+.pie p { margin: 0; }
